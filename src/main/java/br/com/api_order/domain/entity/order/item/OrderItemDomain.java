@@ -3,7 +3,6 @@ package br.com.api_order.domain.entity.order.item;
 import br.com.api_order.application.dtos.product.ProductDTO;
 import br.com.api_order.domain.entity.DomainEntity;
 import br.com.api_order.domain.entity.order.OrderDomain;
-import br.com.api_order.domain.entity.product.ProductDomain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
