@@ -1,7 +1,6 @@
 package br.com.api_order.infra.persistence.entities.order.item;
 
 import br.com.api_order.infra.persistence.entities.order.OrderEntity;
-import br.com.api_order.infra.persistence.entities.product.ProductEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -34,10 +33,6 @@ public class OrderItemEntity {
 
     @Column(name = "ID_PRODUCT", nullable = false)
     private UUID idProduct;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_PRODUCT", referencedColumnName = "ID", insertable = false, updatable = false)
-    private ProductEntity product;
 
     @Column(name = "ID_ORDER", nullable = false)
     private UUID idOrder;

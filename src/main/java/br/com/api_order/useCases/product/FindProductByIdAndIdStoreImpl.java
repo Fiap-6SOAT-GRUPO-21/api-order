@@ -1,9 +1,8 @@
 package br.com.api_order.useCases.product;
 
-import br.com.api_order.domain.entity.product.ProductDomain;
-import br.com.api_order.domain.persistence.product.ProductPersistence;
+import br.com.api_order.application.dtos.product.ProductDTO;
 import br.com.api_order.domain.useCases.product.FindProductByIdAndIdStore;
-import br.com.api_order.useCases.order.exceptions.ProductInOrderNotFound;
+import br.com.api_order.infra.gateways.internal.food.ApiFood;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +12,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FindProductByIdAndIdStoreImpl implements FindProductByIdAndIdStore {
 
-    private final ProductPersistence productPersistence;
+    private final ApiFood apiFood;
 
     @Override
-    public ProductDomain execute(UUID idProduct, UUID idStore) {
-        return productPersistence.findByIdAndIdStore(idProduct, idStore)
-                .orElseThrow(() -> new ProductInOrderNotFound("Product with id " + idProduct + ", by idStore: " + idStore + " not found"));
+    public ProductDTO execute(UUID idProduct, UUID idStore) {
+        return apiFood.findProductByIdAndIdStore(idProduct.toString());
     }
 }

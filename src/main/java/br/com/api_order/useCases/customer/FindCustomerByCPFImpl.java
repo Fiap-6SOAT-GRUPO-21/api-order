@@ -1,9 +1,8 @@
 package br.com.api_order.useCases.customer;
 
-import br.com.api_order.useCases.customer.exceptions.CustomerNotFoundByCPF;
-import br.com.api_order.domain.entity.customer.CustomerDomain;
-import br.com.api_order.domain.persistence.customer.CustomerPersistence;
+import br.com.api_order.application.dtos.customer.CustomerDTO;
 import br.com.api_order.domain.useCases.customer.FindCustomerByCPF;
+import br.com.api_order.infra.gateways.internal.food.ApiFood;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +10,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FindCustomerByCPFImpl implements FindCustomerByCPF {
 
-    private final CustomerPersistence customerPersistencePort;
+    final ApiFood apiFood;
+
     @Override
-    public CustomerDomain execute(String cpf) {
-        return customerPersistencePort.findByCpf(cpf)
-                .orElseThrow(CustomerNotFoundByCPF::new);
+    public CustomerDTO execute(String cpf) {
+        CustomerDTO customerResponse = apiFood.findCustomerByCpf(cpf);
+        return CustomerDTO.builder()
+                .name(customerResponse.getName())
+                .email(customerResponse.getEmail())
+                .cpf(customerResponse.getCpf())
+                .idStore(customerResponse.getIdStore())
+                .build();
     }
 }

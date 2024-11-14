@@ -36,13 +36,13 @@ public class OrderResponse {
     private BigDecimal total;
 
     @Schema(description = "Customer ID", example = "66b523b6-5d3f-4a94-9eed-249f5e287847")
-    private String idCustomer;
+    private UUID idCustomer;
 
     @Schema(description = "05385157830")
     private String cpf;
 
     @Schema(description = "Payment ID", example = "53c8910e-bbca-4b3a-af66-e35398478d6e")
-    private String idPayment;
+    private UUID idPayment;
 
     @Schema(description = "Payment type", example = "MERCADO_PAGO")
     private PaymentType paymentType;

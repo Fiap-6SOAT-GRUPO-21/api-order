@@ -1,9 +1,8 @@
 package br.com.api_order.useCases.store;
 
-import br.com.api_order.domain.entity.store.StoreDomain;
-import br.com.api_order.domain.persistence.store.StorePersistence;
+import br.com.api_order.application.dtos.store.StoreDTO;
 import br.com.api_order.domain.useCases.store.FindStoreById;
-import br.com.api_order.useCases.store.exceptions.StoreNotFound;
+import br.com.api_order.infra.gateways.internal.food.ApiFood;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +12,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FindStoreByIdImpl implements FindStoreById {
 
-    final StorePersistence storePersistence;
+    final ApiFood apiFood;
+
     @Override
-    public StoreDomain execute(UUID id) {
-        return storePersistence.findById(id)
-                .orElseThrow(StoreNotFound::new);
+    public StoreDTO execute(UUID id) {
+        return apiFood.getStoreById(String.valueOf(id));
     }
 }

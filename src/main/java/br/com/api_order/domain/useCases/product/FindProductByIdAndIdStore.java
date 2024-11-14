@@ -1,10 +1,11 @@
 package br.com.api_order.domain.useCases.product;
 
-import br.com.api_order.domain.entity.product.ProductDomain;
+import br.com.api_order.application.dtos.product.ProductDTO;
 
 import java.util.UUID;
 
 public interface FindProductByIdAndIdStore {
 
-    ProductDomain execute(UUID idProduct, UUID idStore);
+    ProductDTO execute(UUID idProduct, UUID idStore);
+
 }

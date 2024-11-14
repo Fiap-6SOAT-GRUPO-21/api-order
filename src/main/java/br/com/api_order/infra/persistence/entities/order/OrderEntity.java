@@ -1,10 +1,7 @@
 package br.com.api_order.infra.persistence.entities.order;
 
 import br.com.api_order.domain.entity.order.enums.StatusOrder;
-import br.com.api_order.infra.persistence.entities.customer.CustomerEntity;
 import br.com.api_order.infra.persistence.entities.order.item.OrderItemEntity;
-import br.com.api_order.infra.persistence.entities.payment.PaymentEntity;
-import br.com.api_order.infra.persistence.entities.store.StoreEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -51,23 +48,11 @@ public class OrderEntity {
     @Column(name = "ID_STORE", nullable = false)
     private UUID idStore;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_STORE", referencedColumnName = "ID", insertable = false, updatable = false)
-    private StoreEntity store;
-
     @Column(name = "ID_CUSTOMER")
     private UUID idCustomer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_CUSTOMER", referencedColumnName = "ID", insertable = false, updatable = false)
-    private CustomerEntity customer;
-
     @Column(name = "ID_PAYMENT")
     private UUID idPayment;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_PAYMENT", referencedColumnName = "ID", insertable = false, updatable = false)
-    private PaymentEntity payment;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItemEntity> items = new ArrayList<>();

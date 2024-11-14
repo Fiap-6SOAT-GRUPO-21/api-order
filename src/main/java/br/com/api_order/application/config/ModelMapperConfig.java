@@ -18,17 +18,6 @@ public class ModelMapperConfig {
         modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        modelMapper.addMappings(new PropertyMap<OrderDomain, OrderResponse>() {
-            @Override
-            protected void configure() {
-                when(Conditions.isNotNull()).map(source.getCustomer().getCpf(), destination.getCpf());
-                when(Conditions.isNotNull()).map(source.getPayment().getId(), destination.getIdPayment());
-                when(Conditions.isNotNull()).map(source.getPayment().getQrCode(), destination.getQrCode());
-                when(Conditions.isNotNull()).map(source.getPayment().getStatus(), destination.getPaymentStatus());
-                when(Conditions.isNotNull()).map(source.getPayment().getType(), destination.getPaymentType());
-            }
-        });
-
         return modelMapper;
     }
 

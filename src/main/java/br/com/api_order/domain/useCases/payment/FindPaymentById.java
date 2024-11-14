@@ -1,10 +1,10 @@
 package br.com.api_order.domain.useCases.payment;
 
-import br.com.api_order.domain.entity.payment.PaymentDomain;
+import br.com.api_order.application.dtos.payment.PaymentDTO;
 
 import java.util.UUID;
 
 public interface FindPaymentById {
 
-    PaymentDomain execute(UUID idPayment);
+    PaymentDTO execute(UUID idPayment);
 }

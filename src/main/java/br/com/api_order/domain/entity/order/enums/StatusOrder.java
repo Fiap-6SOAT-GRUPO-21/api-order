@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum StatusOrder {
+
     RECEIVED("Recebido"),
     IN_PREPARATION("Em preparação"),
     READY_FOR_PICKUP("Pronto para retirada"),

@@ -1,17 +1,14 @@
 package br.com.api_order.domain.entity.order;
 
+import br.com.api_order.application.dtos.product.ProductDTO;
+import br.com.api_order.application.dtos.store.StoreDTO;
 import br.com.api_order.domain.entity.DomainEntity;
-import br.com.api_order.domain.entity.customer.CustomerDomain;
 import br.com.api_order.domain.entity.order.enums.StatusOrder;
 import br.com.api_order.domain.entity.order.item.OrderItemDomain;
-import br.com.api_order.domain.entity.payment.PaymentDomain;
-import br.com.api_order.domain.entity.payment.enums.PaymentStatus;
-import br.com.api_order.domain.entity.store.StoreDomain;
 import br.com.api_order.domain.useCases.product.FindProductById;
 import br.com.api_order.domain.useCases.product.FindProductByIdAndIdStore;
 import br.com.api_order.domain.useCases.store.FindStoreById;
 import br.com.api_order.useCases.order.exceptions.EmptyOrderItems;
-import br.com.api_order.useCases.order.exceptions.OrderPaymentApproved;
 import br.com.api_order.useCases.order.item.exceptions.EmptyQuantityItems;
 import br.com.api_order.useCases.product.exceptions.ProductNotFound;
 import br.com.api_order.useCases.store.exceptions.StoreInactive;
@@ -35,22 +32,18 @@ public class OrderDomain extends DomainEntity {
     private StatusOrder status;
     private BigDecimal total;
     private UUID idCustomer;
-    private CustomerDomain customer;
     private UUID idStore;
-    private StoreDomain store;
     private UUID idPayment;
-    private PaymentDomain payment;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public void validatedStore(FindStoreById findStoreById) {
-        StoreDomain storeDomain = findStoreById.execute(this.getIdStore());
+        StoreDTO storeResponse = findStoreById.execute(this.getIdStore());
 
-        if (!storeDomain.isActive())
+        if (!storeResponse.isActive())
             throw new StoreInactive();
 
-        this.setStore(storeDomain);
-        this.setIdStore(storeDomain.getId());
+        this.setIdStore(storeResponse.getId());
     }
 
     public void validatedQuantityItems(List<OrderItemDomain> items) {
@@ -64,8 +57,10 @@ public class OrderDomain extends DomainEntity {
     }
 
     public void validatedItemOrException(FindProductByIdAndIdStore findProductByIdAndIdStore) {
-        this.getItems().forEach(item ->
-                item.setProduct(findProductByIdAndIdStore.execute(item.getIdProduct(), this.getIdStore())));
+        this.getItems().forEach(item -> {
+            ProductDTO product = findProductByIdAndIdStore.execute(item.getIdProduct(), this.getIdStore());
+            item.setProduct(product);
+        });
     }
 
     public void calculateTotal(FindProductById findProductById) {
@@ -76,8 +71,4 @@ public class OrderDomain extends DomainEntity {
                 .orElseThrow(ProductNotFound::new));
     }
 
-    public void validatedPayments() {
-        if (this.getPayment() != null && this.getPayment().getStatus().equals(PaymentStatus.APPROVED))
-            throw new OrderPaymentApproved();
-    }
 }

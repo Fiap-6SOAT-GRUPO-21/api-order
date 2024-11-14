@@ -1,6 +1,5 @@
 package br.com.api_order.application.handler;
 
-import br.com.api_order.useCases.category.exceptions.ExistProductInCategory;
 import br.com.api_order.useCases.order.exceptions.CustomerInOrderNotFound;
 import br.com.api_order.useCases.order.exceptions.ProductInOrderNotFound;
 import jakarta.validation.ConstraintViolationException;
@@ -23,14 +22,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String MESSAGE = "message";
     private static final String ERRORS = "message";
-
-    @ExceptionHandler(ExistProductInCategory.class)
-    public ResponseEntity<Object> handleExistProductInCategory(ExistProductInCategory ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put(MESSAGE, ex.getMessage());
-
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-    }
 
     @ExceptionHandler(CustomerInOrderNotFound.class)
     public ResponseEntity<Object> handleCustomerInOrderNotFound(CustomerInOrderNotFound ex) {

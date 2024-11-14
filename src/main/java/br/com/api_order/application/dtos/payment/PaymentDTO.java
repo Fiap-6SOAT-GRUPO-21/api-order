@@ -1,23 +1,20 @@
-package br.com.api_order.domain.entity.payment;
+package br.com.api_order.application.dtos.payment;
 
-import br.com.api_order.domain.entity.DomainEntity;
 import br.com.api_order.domain.entity.payment.enums.PaymentStatus;
 import br.com.api_order.domain.entity.payment.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentDomain extends DomainEntity {
+public class PaymentDTO {
 
-    private UUID id;
+    private UUID paymentId;
 
     private UUID idOrder;
 
@@ -28,4 +25,5 @@ public class PaymentDomain extends DomainEntity {
     private String qrCode;
 
     private PaymentStatus status;
+
 }

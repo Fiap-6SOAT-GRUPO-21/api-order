@@ -1,10 +1,10 @@
 package br.com.api_order.domain.useCases.customer;
 
-import br.com.api_order.domain.entity.customer.CustomerDomain;
+import br.com.api_order.application.dtos.customer.CustomerDTO;
 
 import java.util.UUID;
 
 public interface FindCustomerById {
 
-    CustomerDomain execute(UUID id);
+    CustomerDTO execute(UUID id);
 }

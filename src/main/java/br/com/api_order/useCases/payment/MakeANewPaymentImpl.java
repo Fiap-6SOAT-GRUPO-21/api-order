@@ -1,15 +1,12 @@
 package br.com.api_order.useCases.payment;
 
-import br.com.api_order.application.dtos.payment.PaymentIntegrationItem;
-import br.com.api_order.application.dtos.payment.PaymentIntegrationOrder;
-import br.com.api_order.application.dtos.payment.PaymentIntegrationResult;
+import br.com.api_order.application.dtos.payment.*;
 import br.com.api_order.domain.entity.order.OrderDomain;
-import br.com.api_order.domain.entity.payment.PaymentDomain;
 import br.com.api_order.domain.entity.payment.enums.PaymentStatus;
 import br.com.api_order.domain.entity.payment.enums.PaymentType;
-import br.com.api_order.domain.useCases.payment.ProcessPayment;
-import br.com.api_order.domain.persistence.payment.PaymentPersistence;
 import br.com.api_order.domain.useCases.payment.MakeANewPayment;
+import br.com.api_order.domain.useCases.payment.ProcessPayment;
+import br.com.api_order.infra.gateways.internal.payments.ApiPayments;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,14 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class MakeANewPaymentImpl implements MakeANewPayment {
 
-    final PaymentPersistence paymentPersistence;
+    final ApiPayments apiPayments;
+
     @Override
-    public PaymentDomain execute(OrderDomain orderDomain, PaymentType provider, ProcessPayment processPayment) {
+    public PaymentDTO execute(OrderDomain orderDomain, PaymentType provider, ProcessPayment processPayment) {
 
         List<PaymentIntegrationItem> item = new ArrayList<>();
 
@@ -39,7 +37,7 @@ public class MakeANewPaymentImpl implements MakeANewPayment {
 
 
         PaymentIntegrationOrder paymentIntegrationOrder = new PaymentIntegrationOrder(
-                orderDomain.getStore().getId(),
+                orderDomain.getIdStore(),
                 UUID.randomUUID(),
                 orderDomain.getTotal(),
                 item
@@ -47,14 +45,13 @@ public class MakeANewPaymentImpl implements MakeANewPayment {
 
         PaymentIntegrationResult paymentIntegrationResult = processPayment.processPayment(paymentIntegrationOrder);
 
-        PaymentDomain paymentDomain = new PaymentDomain();
-        paymentDomain.setId(paymentIntegrationResult.getPaymentId());
-        paymentDomain.setAmount(paymentIntegrationOrder.getAmount());
-        paymentDomain.setQrCode(paymentIntegrationResult.getQrCode());
-        paymentDomain.setType(provider);
-        paymentDomain.setStatus(PaymentStatus.PENDING);
-        paymentDomain.setIdOrder(orderDomain.getId());
+        PaymentRequestDTO paymentRequest = PaymentRequestDTO.builder()
+                .amount(orderDomain.getTotal())
+                .type(provider)
+                .qrCode(paymentIntegrationResult.getQrCode())
+                .status(PaymentStatus.PENDING)
+                .build();
 
-        return paymentPersistence.save(paymentDomain);
+        return apiPayments.createPayment(paymentRequest);
     }
 }

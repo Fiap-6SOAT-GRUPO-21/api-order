@@ -1,8 +1,10 @@
 package br.com.api_order.domain.useCases.customer;
 
-import br.com.api_order.domain.entity.customer.CustomerDomain;
+import br.com.api_order.application.dtos.customer.CustomerDTO;
 
 public interface FindCustomerByCPF {
 
-    CustomerDomain execute(String cpf);
+    CustomerDTO execute(String cpf);
+
 }
+

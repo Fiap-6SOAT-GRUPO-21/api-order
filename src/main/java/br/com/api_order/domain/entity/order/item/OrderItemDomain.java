@@ -1,5 +1,6 @@
 package br.com.api_order.domain.entity.order.item;
 
+import br.com.api_order.application.dtos.product.ProductDTO;
 import br.com.api_order.domain.entity.DomainEntity;
 import br.com.api_order.domain.entity.order.OrderDomain;
 import br.com.api_order.domain.entity.product.ProductDomain;
@@ -18,7 +19,7 @@ public class OrderItemDomain extends DomainEntity {
 
     private UUID idProduct;
 
-    private ProductDomain product;
+    private ProductDTO product;
 
     private UUID idOrder;
 

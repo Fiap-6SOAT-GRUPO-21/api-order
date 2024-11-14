@@ -1,19 +1,15 @@
 package br.com.api_order.useCases.order;
 
-import br.com.api_order.domain.entity.customer.CustomerDomain;
+import br.com.api_order.application.dtos.customer.CustomerDTO;
 import br.com.api_order.domain.entity.order.OrderDomain;
 import br.com.api_order.domain.entity.order.enums.StatusOrder;
 import br.com.api_order.domain.entity.order.item.OrderItemDomain;
-import br.com.api_order.domain.entity.payment.PaymentDomain;
 import br.com.api_order.domain.entity.payment.enums.PaymentType;
 import br.com.api_order.domain.persistence.order.OrderPersistence;
-import br.com.api_order.domain.persistence.payment.PaymentPersistence;
 import br.com.api_order.domain.useCases.customer.FindCustomerByCPF;
 import br.com.api_order.domain.useCases.order.FindOrderById;
 import br.com.api_order.domain.useCases.order.UpdateOrder;
 import br.com.api_order.domain.useCases.order.item.CreateNewOrderItem;
-import br.com.api_order.domain.useCases.payment.MakeANewPayment;
-import br.com.api_order.domain.useCases.payment.ProcessPayment;
 import br.com.api_order.domain.useCases.product.FindProductById;
 import br.com.api_order.domain.useCases.product.FindProductByIdAndIdStore;
 import br.com.api_order.useCases.order.exceptions.OrderStatusNotReceived;
@@ -21,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,9 +31,6 @@ public class UpdateOrderImpl implements UpdateOrder {
     private final FindProductById findProductById;
     private final FindProductByIdAndIdStore findProductByIdAndIdStore;
     private final CreateNewOrderItem createNewOrderItem;
-    private final MakeANewPayment makeANewPayment;
-    private final PaymentPersistence paymentPersistencePort;
-    private final Map<String, ProcessPayment> processPaymentList;
 
     @Override
     public OrderDomain execute(UUID idOrder, String cpf, List<OrderItemDomain> items, PaymentType provider) {
@@ -49,7 +41,6 @@ public class UpdateOrderImpl implements UpdateOrder {
         if (!orderDomain.getStatus().equals(StatusOrder.RECEIVED))
             throw new OrderStatusNotReceived();
 
-        orderDomain.validatedPayments();
         orderDomain.validatedItemOrException(findProductByIdAndIdStore);
 
         items.forEach(item -> {
@@ -61,17 +52,12 @@ public class UpdateOrderImpl implements UpdateOrder {
         });
 
         if (cpf != null) {
-            CustomerDomain customerDomain = findCustomerByCPF.execute(cpf);
-                orderDomain.setIdCustomer(customerDomain.getId());
-                orderDomain.setCustomer(customerDomain);
-
+            CustomerDTO customerDomain = findCustomerByCPF.execute(cpf);
+            orderDomain.setIdCustomer(customerDomain.getId());
         }
 
         orderDomain.setStatus(StatusOrder.RECEIVED);
 
-        UUID oldIdPayment = orderDomain.getPayment().getId();
-
-        orderDomain.setPayment(null);
         orderDomain.setIdPayment(null);
 
         orderDomain.calculateTotal(findProductById);
@@ -87,20 +73,7 @@ public class UpdateOrderImpl implements UpdateOrder {
                 .collect(Collectors.toList());
 
         orderDomainSave.setItems(savedItems);
-
-        ProcessPayment processPayment = processPaymentList.get(provider.name());
-        if (processPayment == null)
-            throw new IllegalArgumentException("Invalid payment provider: " + provider);
-
-        PaymentDomain payment = makeANewPayment.execute(orderDomainSave, provider, processPayment);
-        orderDomainSave.setPayment(payment);
-        orderDomainSave.setIdPayment(payment.getId());
-
-        OrderDomain save = orderPersistence.save(orderDomainSave);
-
-        paymentPersistencePort.deleteByID(oldIdPayment);
-
-        return save;
+        return orderPersistence.save(orderDomainSave);
     }
 
     private Optional<OrderItemDomain> findOrderItemDomain(OrderDomain orderDomain, OrderItemDomain item) {

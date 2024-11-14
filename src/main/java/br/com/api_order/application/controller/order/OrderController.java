@@ -44,42 +44,42 @@ public class OrderController {
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<List<OrderResponse>> getByCpf(@PathVariable String cpf) {
         List<OrderDomain> orderDomains = findOrdersByCPF.execute(cpf);
-        List<OrderResponse> orderRespons = orderDomains.stream()
+        List<OrderResponse> orderResponse = orderDomains.stream()
                 .map(orderDomain -> modelMapper.map(orderDomain, OrderResponse.class))
                 .collect(Collectors.toList());
 
-        if (orderRespons.isEmpty())
+        if (orderResponse.isEmpty())
             return ResponseEntity.noContent().build();
 
-        return ResponseEntity.ok(orderRespons);
+        return ResponseEntity.ok(orderResponse);
     }
 
     @Operation(summary = "Get all orders")
     @GetMapping("/all")
     public ResponseEntity<List<OrderResponse>> getAll() {
         List<OrderDomain> orderDomains = findAllOrders.execute();
-        List<OrderResponse> orderRespons = orderDomains.stream()
+        List<OrderResponse> orderResponse = orderDomains.stream()
                 .map(orderDomain -> modelMapper.map(orderDomain, OrderResponse.class))
                 .collect(Collectors.toList());
 
-        if (orderRespons.isEmpty())
+        if (orderResponse.isEmpty())
             return ResponseEntity.noContent().build();
 
-        return ResponseEntity.ok(orderRespons);
+        return ResponseEntity.ok(orderResponse);
     }
 
     @Operation(summary = "Get all ordered by status and date")
     @GetMapping("/all/ordered")
     public ResponseEntity<List<OrderResponse>> getAllOrdered() {
         List<OrderDomain> orderDomains = findAllOrdersOrdered.execute();
-        List<OrderResponse> orderRespons = orderDomains.stream()
+        List<OrderResponse> orderResponse = orderDomains.stream()
                 .map(orderDomain -> modelMapper.map(orderDomain, OrderResponse.class))
                 .collect(Collectors.toList());
 
-        if (orderRespons.isEmpty())
+        if (orderResponse.isEmpty())
             return ResponseEntity.noContent().build();
 
-        return ResponseEntity.ok(orderRespons);
+        return ResponseEntity.ok(orderResponse);
     }
 
     @Operation(summary = "Create a new order")
@@ -87,9 +87,8 @@ public class OrderController {
     public ResponseEntity<OrderResponse> save(@RequestBody OrderRequest orderRequest) {
         OrderDomain orderDomain = convertToOrderDomain(orderRequest);
 
-        OrderDomain orderDomainSaved = createNewOrder.execute(orderDomain, orderRequest.getCustomer() != null ? orderRequest.getCustomer().getCpf() : null, orderRequest.getPaymentType());
-        OrderResponse orderResponseSaved = modelMapper.map(orderDomainSaved, OrderResponse.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseSaved);
+        OrderResponse orderDomainSaved = createNewOrder.execute(orderDomain, orderRequest.getCustomer() != null ? orderRequest.getCustomer().getCpf() : null, orderRequest.getPaymentType());
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderDomainSaved);
     }
 
     @Operation(summary = "Update a order by id")
@@ -98,6 +97,7 @@ public class OrderController {
         OrderDomain orderDomain = convertToOrderDomain(orderRequest);
 
         OrderDomain orderDomainUpdated = updateOrder.execute(id, orderRequest.getCustomer() != null ? orderRequest.getCustomer().getCpf() : null, orderDomain.getItems(), orderRequest.getPaymentType());
+
         OrderResponse orderResponseUpdated = modelMapper.map(orderDomainUpdated, OrderResponse.class);
         return ResponseEntity.ok(orderResponseUpdated);
     }
