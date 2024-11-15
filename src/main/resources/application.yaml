@@ -38,14 +38,7 @@ springdoc:
 api:
   url:
     api-food: ${API_FOOD_URL:http://localhost:8088}
-    api-order: ${API_ORDER_URL:http://localhost:8089}
     api-payment: ${API_PAYMENT_URL:http://localhost:8090}
-
-mercado-pago:
-  url: "https://api.mercadopago.com"
-  access-token: "Bearer APP_USR-151362775144770-012219-ad26be97b5a2ceab5965aaf6409a0d70-1650421194"
-
-
 
 environment:
   name: ${ENVIRONMENT:local}
