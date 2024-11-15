@@ -7,6 +7,10 @@ import java.time.temporal.ChronoUnit;
 
 public class DateTimeUtils {
 
+    private DateTimeUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static String generateExpirationDatePayment() {
         ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime expirationDate = now.plus(30, ChronoUnit.MINUTES);
