@@ -56,7 +56,7 @@ public class CustomFeignLogger extends Logger {
 
     @Override
     protected void log(String configKey, String format, Object... args) {
-        log.info(String.format(methodTag(configKey) + format, args));
+        log.info("{} {}", methodTag(configKey) + format, args);
     }
 
     @Override
