@@ -5,7 +5,7 @@ import br.com.api_order.application.dtos.order.response.OrderResponse;
 import br.com.api_order.domain.entity.order.OrderDomain;
 import br.com.api_order.domain.entity.order.enums.StatusOrder;
 import br.com.api_order.domain.entity.order.item.OrderItemDomain;
-import br.com.api_order.domain.useCases.order.*;
+import br.com.api_order.domain.use_case.order.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

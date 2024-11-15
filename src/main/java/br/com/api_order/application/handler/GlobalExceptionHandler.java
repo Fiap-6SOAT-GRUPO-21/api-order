@@ -1,7 +1,7 @@
 package br.com.api_order.application.handler;
 
-import br.com.api_order.useCases.order.exceptions.CustomerInOrderNotFound;
-import br.com.api_order.useCases.order.exceptions.ProductInOrderNotFound;
+import br.com.api_order.use_case.order.exceptions.CustomerInOrderNotFound;
+import br.com.api_order.use_case.order.exceptions.ProductInOrderNotFound;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
