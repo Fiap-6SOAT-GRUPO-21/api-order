@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:8088}
+  port: ${PORT:8089}
   error:
     include-message: always
 
@@ -7,7 +7,7 @@ spring:
   application:
     name: api-order-service
   datasource:
-    url: jdbc:postgresql://${DB_URL:localhost}:${DB_PORT:5432}/${DB_NAME:api_order}
+    url: jdbc:postgresql://${DB_URL:localhost}:${DB_PORT:5433}/${DB_NAME:apiorder}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
   jpa:
@@ -38,7 +38,5 @@ springdoc:
 api:
   url:
     api-food: ${API_FOOD_URL:http://localhost:8088}
+    #    api-order: ${API_ORDER_URL:http://localhost:8089}
     api-payment: ${API_PAYMENT_URL:http://localhost:8090}
-
-environment:
-  name: ${ENVIRONMENT:local}

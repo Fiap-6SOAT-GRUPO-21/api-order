@@ -13,6 +13,7 @@ import java.util.List;
 public class FindAllOrdersOrderedImpl implements FindAllOrdersOrdered {
 
     private final OrderPersistence orderPersistence;
+
     @Override
     public List<OrderDomain> execute() {
         return orderPersistence.findAllOrdered();

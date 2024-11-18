@@ -34,7 +34,8 @@ docker push josevitordurante/api-food:latest
 Para implantar a aplicação localmente usando Minikube, você precisa aplicar os arquivos de configuração do Kubernetes
 YAML. Siga estas etapas:
 
-#### Atenção: Troque para "local" o valor da variável de ambiente `ENVIRONMENT_DEPLOY` no arquivo `app-deployment.yaml`para rodar localmente sem rodar o script de init para setar a url de notificação do mercado pago
+#### Atenção: Troque para "local" o valor da variável de ambiente `ENVIRONMENT_DEPLOY` no arquivo
+`app-deployment.yaml`para rodar localmente sem rodar o script de init para setar a url de notificação do mercado pago
 
 1. Certifique-se de ter o `minikube` e o `kubectl` instalados na sua máquina.
 

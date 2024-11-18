@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ApiFood {
 
     @GetMapping("/store/{id}")
-    StoreDTO getStoreById(@PathVariable("id")String id);
+    StoreDTO getStoreById(@PathVariable("id") String id);
 
     @GetMapping("/product/{id}")
-    ProductDTO findProductByIdAndIdStore(@PathVariable("id")String id);
+    ProductDTO findProductByIdAndIdStore(@PathVariable("id") String id);
 
-    @GetMapping("/customer/{id}")
-    CustomerDTO findCustomerByCpf(@PathVariable("id")String id);
+    @GetMapping("/customer/cpf/{cpf}")
+    CustomerDTO findCustomerByCpf(@PathVariable("cpf") String cpf);
 }

@@ -6,7 +6,6 @@ import feign.Response;
 import feign.Util;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,9 +17,6 @@ import java.util.Map;
 @Setter
 @Component
 public class CustomFeignLogger extends Logger {
-
-    @Value("${environment.name}")
-    private String environmentName;
 
     @Override
     protected void logRequest(String configKey, Level logLevel, Request request) {
@@ -44,9 +40,7 @@ public class CustomFeignLogger extends Logger {
             curlCommand.append(" -d '").append(new String(request.body())).append("'");
         }
 
-        if (!"prd".equalsIgnoreCase(environmentName)) {
-            log.info("HTTP request: {}", curlCommand);
-        }
+        log.info("HTTP request: {}", curlCommand);
     }
 
     @Override
@@ -70,8 +64,7 @@ public class CustomFeignLogger extends Logger {
 
         String msgLog = "HTTP Response: URL " + response.request().url() + " | STATUS: " + status + " | TIME: " + elapsedTime + "ms";
 
-        if (!"prd".equalsIgnoreCase(environmentName))
-            msgLog += " | RESPONSE BODY: " + responseBody;
+        msgLog += " | RESPONSE BODY: " + responseBody;
 
         log.info(msgLog);
 

@@ -1,20 +1,19 @@
 package br.com.api_order.use_case.payment;
 
-import br.com.api_order.application.dtos.payment.*;
+import br.com.api_order.application.dtos.payment.PaymentDTO;
 import br.com.api_order.domain.entity.order.OrderDomain;
-import br.com.api_order.domain.entity.payment.enums.PaymentStatus;
 import br.com.api_order.domain.entity.payment.enums.PaymentType;
 import br.com.api_order.domain.use_case.payment.MakeANewPayment;
-import br.com.api_order.domain.use_case.payment.ProcessPayment;
 import br.com.api_order.infra.gateways.internal.payments.ApiPayments;
+import br.com.api_order.infra.gateways.internal.payments.dto.NewPaymentDTO;
+import br.com.api_order.infra.gateways.internal.payments.dto.order.OrderDTO;
+import br.com.api_order.infra.gateways.internal.payments.dto.order.OrderItemDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -24,34 +23,27 @@ public class MakeANewPaymentImpl implements MakeANewPayment {
     final ApiPayments apiPayments;
 
     @Override
-    public PaymentDTO execute(OrderDomain orderDomain, PaymentType provider, ProcessPayment processPayment) {
+    public PaymentDTO execute(OrderDomain orderDomain, PaymentType provider) {
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setOrderId(orderDomain.getId());
+        orderDTO.setTotal(orderDomain.getTotal());
+        orderDTO.setIdStore(orderDomain.getIdStore());
 
-        List<PaymentIntegrationItem> item = new ArrayList<>();
+        List<OrderItemDTO> orderItemDTOS = orderDomain.getItems().stream()
+                .map(orderItemDomain -> new OrderItemDTO(
+                        orderItemDomain.getIdProduct(),
+                        orderItemDomain.getProduct().getName(),
+                        orderItemDomain.getProduct().getPrice(),
+                        orderItemDomain.getIdOrder(),
+                        orderItemDomain.getQuantity()
+                ))
+                .collect(Collectors.toList());
 
-        orderDomain.getItems().forEach(itemDomain -> item.add(new PaymentIntegrationItem(
-                itemDomain.getQuantity(),
-                itemDomain.getProduct().getPrice().multiply(BigDecimal.valueOf(itemDomain.getQuantity())),
-                itemDomain.getProduct().getPrice(),
-                itemDomain.getProduct().getName()
-        )));
+        orderDTO.setItems(orderItemDTOS);
 
-
-        PaymentIntegrationOrder paymentIntegrationOrder = new PaymentIntegrationOrder(
-                orderDomain.getIdStore(),
-                UUID.randomUUID(),
-                orderDomain.getTotal(),
-                item
-        );
-
-        PaymentIntegrationResult paymentIntegrationResult = processPayment.processPayment(paymentIntegrationOrder);
-
-        PaymentRequestDTO paymentRequest = PaymentRequestDTO.builder()
-                .amount(orderDomain.getTotal())
-                .type(provider)
-                .qrCode(paymentIntegrationResult.getQrCode())
-                .status(PaymentStatus.PENDING)
-                .build();
-
-        return apiPayments.createPayment(paymentRequest);
+        NewPaymentDTO newPaymentDTO = new NewPaymentDTO();
+        newPaymentDTO.setOrderDTO(orderDTO);
+        newPaymentDTO.setProvider(provider);
+        return apiPayments.createPayment(newPaymentDTO);
     }
 }

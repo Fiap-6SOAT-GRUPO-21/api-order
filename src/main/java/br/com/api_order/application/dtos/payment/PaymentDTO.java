@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PaymentDTO {
 
-    private UUID paymentId;
+    private UUID id;
 
     private UUID idOrder;
 

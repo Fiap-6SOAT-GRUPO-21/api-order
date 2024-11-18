@@ -12,7 +12,6 @@ import br.com.api_order.domain.use_case.customer.FindCustomerByCPF;
 import br.com.api_order.domain.use_case.order.CreateNewOrder;
 import br.com.api_order.domain.use_case.order.item.CreateNewOrderItem;
 import br.com.api_order.domain.use_case.payment.MakeANewPayment;
-import br.com.api_order.domain.use_case.payment.ProcessPayment;
 import br.com.api_order.domain.use_case.product.FindProductById;
 import br.com.api_order.domain.use_case.product.FindProductByIdAndIdStore;
 import br.com.api_order.domain.use_case.store.FindStoreById;
@@ -21,7 +20,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +33,6 @@ public class CreateNewOrderImpl implements CreateNewOrder {
     private final FindProductByIdAndIdStore findProductByIdAndIdStore;
     private final MakeANewPayment makeANewPayment;
     private final FindCustomerByCPF findCustomerByCPF;
-    private final Map<String, ProcessPayment> processPaymentList;
     private final ModelMapper modelMapper;
 
     @Override
@@ -63,14 +60,12 @@ public class CreateNewOrderImpl implements CreateNewOrder {
                 })
                 .collect(Collectors.toList());
 
+        savedItems.forEach(item -> item.setProduct(findProductById.execute(item.getIdProduct())));
+
         orderDomainSave.setItems(savedItems);
 
-        ProcessPayment processPayment = processPaymentList.get(provider.name());
-        if (processPayment == null)
-            throw new IllegalArgumentException("Invalid payment provider: " + provider);
-
-        PaymentDTO payment = makeANewPayment.execute(orderDomainSave, provider, processPayment);
-        orderDomainSave.setIdPayment(payment.getPaymentId());
+        PaymentDTO payment = makeANewPayment.execute(orderDomainSave, provider);
+        orderDomainSave.setIdPayment(payment.getId());
 
         OrderDomain savedOrder = orderPersistence.save(orderDomainSave);
         OrderResponse orderResponse = modelMapper.map(savedOrder, OrderResponse.class);

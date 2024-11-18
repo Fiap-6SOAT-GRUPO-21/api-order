@@ -1,7 +1,7 @@
 package br.com.api_order.infra.gateways.internal.payments;
 
 import br.com.api_order.application.dtos.payment.PaymentDTO;
-import br.com.api_order.application.dtos.payment.PaymentRequestDTO;
+import br.com.api_order.infra.gateways.internal.payments.dto.NewPaymentDTO;
 import br.com.api_order.infra.interceptor.DefaultInterceptor;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 )
 public interface ApiPayments {
 
-    @PostMapping("/payments")
-    PaymentDTO createPayment(PaymentRequestDTO request);
+    @PostMapping("/payment")
+    PaymentDTO createPayment(NewPaymentDTO request);
 
 }

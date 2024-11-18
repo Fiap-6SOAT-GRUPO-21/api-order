@@ -11,8 +11,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FindAllOrdersImpl implements FindAllOrders {
-    
+
     private final OrderPersistence orderPersistence;
+
     @Override
     public List<OrderDomain> execute() {
         return orderPersistence.findAll();

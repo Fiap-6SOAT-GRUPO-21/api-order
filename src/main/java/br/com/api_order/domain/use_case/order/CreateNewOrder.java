@@ -6,5 +6,5 @@ import br.com.api_order.domain.entity.payment.enums.PaymentType;
 
 public interface CreateNewOrder {
 
-   OrderResponse execute(OrderDomain orderDomain, String cpf, PaymentType provider);
+    OrderResponse execute(OrderDomain orderDomain, String cpf, PaymentType provider);
 }

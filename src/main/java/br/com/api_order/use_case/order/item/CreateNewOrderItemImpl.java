@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class CreateNewOrderItemImpl implements CreateNewOrderItem {
 
     final OrderItemPersistence orderItemPersistence;
+
     @Override
     public OrderItemDomain execute(OrderItemDomain orderItemDomain) {
         return orderItemPersistence.save(orderItemDomain);
