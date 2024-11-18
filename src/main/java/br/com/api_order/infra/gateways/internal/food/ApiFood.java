@@ -8,6 +8,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.UUID;
+
 @FeignClient(name = "internal-api-food",
         url = "${api.url.api-food}",
         configuration = DefaultInterceptor.class
@@ -15,10 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ApiFood {
 
     @GetMapping("/store/{id}")
-    StoreDTO getStoreById(@PathVariable("id") String id);
+    StoreDTO getStoreById(@PathVariable("id") UUID id);
 
     @GetMapping("/product/{id}")
-    ProductDTO findProductByIdAndIdStore(@PathVariable("id") String id);
+    ProductDTO findProductByIdAndIdStore(@PathVariable("id") UUID id);
 
     @GetMapping("/customer/cpf/{cpf}")
     CustomerDTO findCustomerByCpf(@PathVariable("cpf") String cpf);
