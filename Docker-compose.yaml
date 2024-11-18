@@ -1,0 +1,46 @@
+# Comando para executar: docker compose up --build --force-recreate
+version: '3.9'
+
+networks:
+  api-order-network:
+    driver: bridge
+
+volumes:
+  pgdata:
+
+services:
+  db_postgres_order:
+    container_name: db_postgres_order
+    image: 'postgres:13.4'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=apiorder
+    ports:
+      - "5433:5432"
+    networks:
+      - api-order-network
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+#  api-order:
+#    container_name: api-order
+#    image: api-order
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - '8088:8088'
+#      - '5006:5006'
+#    environment:
+#      PORT: 8088
+#      DB_URL: db_postgres_order
+#      DB_PORT: 5433
+#      DB_USERNAME: postgres
+#      DB_PASSWORD: postgres
+#      DB_NAME: apiorder
+#      ADDITIONAL_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5006 -Xmx1G -Xms128m -XX:MaxMetaspaceSize=128m
+#    networks:
+#      - api-order-network
+#    depends_on:
+#      - db_postgres_order

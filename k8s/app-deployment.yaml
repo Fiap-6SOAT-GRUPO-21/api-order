@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-order
+  labels:
+    app: api-order
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-order
+  template:
+    metadata:
+      labels:
+        app: api-order
+    spec:
+      containers:
+        - name: api-order
+          image: josevitordurante/api-order:latest
+          ports:
+            - containerPort: 8089
+          env:
+            - name: PORT
+              value: "8089"
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: api-order-config
+                  key: DB_NAME
+            - name: DB_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-order-config
+                  key: DB_URL
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: api-order-config
+                  key: DB_PORT
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: api-order-config
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: api-order-config
+                  key: DB_PASSWORD
+            - name: NOTIFICATION_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-order-config
+                  key: NOTIFICATION_URL
+            - name: API_FOOD_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-order-config
+                  key: API_FOOD_URL
+            - name: API_ORDER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-order-config
+                  key: API_ORDER_URL
+            - name: API_PAYMENT_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: api-order-config
+                  key: API_PAYMENT_URL
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
