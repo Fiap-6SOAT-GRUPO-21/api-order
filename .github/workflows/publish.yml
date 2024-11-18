@@ -32,11 +32,11 @@ jobs:
       - name: Get RDS credentials from SSM Parameter Store
         id: get-parameters
         run: |
-          DB_URL=$(aws ssm get-parameter --name "/techchallenge/api_food/rds/db_url" --with-decryption --query "Parameter.Value" --output text)
-          DB_USERNAME=$(aws ssm get-parameter --name "/techchallenge/api_food/rds/db_username" --with-decryption --query "Parameter.Value" --output text)
-          DB_PASSWORD=$(aws ssm get-parameter --name "/techchallenge/api_food/rds/db_password" --with-decryption --query "Parameter.Value" --output text)
-          DB_PORT=$(aws ssm get-parameter --name "/techchallenge/api_food/rds/db_port" --with-decryption --query "Parameter.Value" --output text)
-          DB_NAME=$(aws ssm get-parameter --name "/techchallenge/api_food/rds/db_name" --with-decryption --query "Parameter.Value" --output text)
+          DB_URL=$(aws ssm get-parameter --name "/techchallenge/api_order/rds/db_url" --with-decryption --query "Parameter.Value" --output text)
+          DB_USERNAME=$(aws ssm get-parameter --name "/techchallenge/api_order/rds/db_username" --with-decryption --query "Parameter.Value" --output text)
+          DB_PASSWORD=$(aws ssm get-parameter --name "/techchallenge/api_order/rds/db_password" --with-decryption --query "Parameter.Value" --output text)
+          DB_PORT=$(aws ssm get-parameter --name "/techchallenge/api_order/rds/db_port" --with-decryption --query "Parameter.Value" --output text)
+          DB_NAME=$(aws ssm get-parameter --name "/techchallenge/api_order/rds/db_name" --with-decryption --query "Parameter.Value" --output text)
           echo "DB_URL=$DB_URL" >> $GITHUB_ENV
           echo "DB_USERNAME=$DB_USERNAME" >> $GITHUB_ENV
           echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
@@ -51,7 +51,7 @@ jobs:
       - name: Update ConfigMap with RDS credentials
         run: |
           kubectl apply -f k8s/app-configmap.yaml
-          kubectl patch configmap api-food-config --type=merge -p='{"data": {"DB_NAME": "'"$DB_NAME"'", "DB_URL": "'"$DB_URL"'", "DB_USERNAME": "'"$DB_USERNAME"'", "DB_PASSWORD": "'"$DB_PASSWORD"'", "DB_PORT": "'"$DB_PORT"'"}}'
+          kubectl patch configmap api-order-config --type=merge -p='{"data": {"DB_NAME": "'"$DB_NAME"'", "DB_URL": "'"$DB_URL"'", "DB_USERNAME": "'"$DB_USERNAME"'", "DB_PASSWORD": "'"$DB_PASSWORD"'", "DB_PORT": "'"$DB_PORT"'"}}'
 
       - name: Deploy Application
         run: |
