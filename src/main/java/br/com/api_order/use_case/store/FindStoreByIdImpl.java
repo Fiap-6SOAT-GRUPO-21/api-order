@@ -16,6 +16,6 @@ public class FindStoreByIdImpl implements FindStoreById {
 
     @Override
     public StoreDTO execute(UUID id) {
-        return apiFood.getStoreById(String.valueOf(id));
+        return apiFood.getStoreById(id);
     }
 }
