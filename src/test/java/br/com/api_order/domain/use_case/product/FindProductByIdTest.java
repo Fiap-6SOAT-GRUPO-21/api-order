@@ -29,7 +29,7 @@ class FindProductByIdTest {
         ProductDTO expectedProduct = new ProductDTO();
         expectedProduct.setId(idProduct);
 
-        when(apiFood.findProductByIdAndIdStore(idProduct.toString())).thenReturn(expectedProduct);
+        when(apiFood.findProductByIdAndIdStore(idProduct)).thenReturn(expectedProduct);
 
         ProductDTO actualProduct = findProductById.execute(idProduct);
 

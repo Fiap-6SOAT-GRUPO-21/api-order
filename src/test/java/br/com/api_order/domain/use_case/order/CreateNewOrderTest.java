@@ -70,6 +70,7 @@ class CreateNewOrderImplTest {
         OrderItemDomain orderItemDomain = new OrderItemDomain();
         orderItemDomain.setIdOrder(UUID.randomUUID());
         orderItemDomain.setQuantity(2);
+        orderItemDomain.setId(UUID.randomUUID());
 
         // Mock do OrderDomain
         OrderDomain orderDomain = Mockito.mock(OrderDomain.class);
@@ -86,6 +87,7 @@ class CreateNewOrderImplTest {
 
         OrderItemDomain savedOrderItem = orderItemDomain;
         savedOrderItem.setId(UUID.randomUUID());
+        savedOrderItem.setIdProduct(UUID.randomUUID());
 
         PaymentDTO paymentDTO = new PaymentDTO();
         paymentDTO.setId(UUID.randomUUID());
@@ -108,7 +110,7 @@ class CreateNewOrderImplTest {
 
         when(findCustomerByCPF.execute(cpf)).thenReturn(customerDTO);
 
-        when(orderPersistence.save(orderDomain)).thenReturn(savedOrderDomain);
+        when(orderPersistence.save(any(OrderDomain.class))).thenReturn(savedOrderDomain);
         when(createNewOrderItem.execute(orderItemDomain)).thenReturn(savedOrderItem);
 
         ProductDTO productDto = new ProductDTO();
@@ -120,9 +122,7 @@ class CreateNewOrderImplTest {
         storeDto.setId(UUID.randomUUID());
         storeDto.setActive(true);
 
-        when(findStoreById.execute(any(UUID.class))).thenReturn(storeDto);
-
-        when(findProductById.execute(productDto.getId())).thenReturn(productDto);
+        when(findProductById.execute(any())).thenReturn(productDto);
 
         when(makeANewPayment.execute(savedOrderDomain, paymentType)).thenReturn(paymentDTO);
 
