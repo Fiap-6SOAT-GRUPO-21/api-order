@@ -31,7 +31,7 @@ class FindProductByIdAndIdStoreTest {
         expectedProduct.setId(idProduct);
         expectedProduct.setIdStore(idStore.toString());
 
-        when(apiFood.findProductByIdAndIdStore(idProduct.toString())).thenReturn(expectedProduct);
+        when(apiFood.findProductByIdAndIdStore(idProduct)).thenReturn(expectedProduct);
 
         ProductDTO actualProduct = findProductByIdAndIdStore.execute(idProduct, idStore);
 

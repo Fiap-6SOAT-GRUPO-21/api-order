@@ -16,6 +16,6 @@ public class FindProductByIdAndIdStoreImpl implements FindProductByIdAndIdStore 
 
     @Override
     public ProductDTO execute(UUID idProduct, UUID idStore) {
-        return apiFood.findProductByIdAndIdStore(idProduct.toString());
+        return apiFood.findProductByIdAndIdStore(idProduct);
     }
 }

@@ -32,7 +32,7 @@ class FindStoreByIdTest {
         mockStore.setName("Test Store");
         mockStore.setActive(true);
 
-        when(apiFood.getStoreById(storeId.toString())).thenReturn(mockStore);
+        when(apiFood.getStoreById(storeId)).thenReturn(mockStore);
 
         StoreDTO result = findStoreById.execute(storeId);
 

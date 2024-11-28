@@ -14,12 +14,6 @@ public class FindCustomerByCPFImpl implements FindCustomerByCPF {
 
     @Override
     public CustomerDTO execute(String cpf) {
-        CustomerDTO customerResponse = apiFood.findCustomerByCpf(cpf);
-        return CustomerDTO.builder()
-                .name(customerResponse.getName())
-                .email(customerResponse.getEmail())
-                .cpf(customerResponse.getCpf())
-                .idStore(customerResponse.getIdStore())
-                .build();
+       return apiFood.findCustomerByCpf(cpf);
     }
 }
