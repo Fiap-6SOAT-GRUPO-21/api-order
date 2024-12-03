@@ -9,8 +9,4 @@ public class ProductNotFound extends RuntimeException {
     public ProductNotFound() {
         super("Product not exists");
     }
-
-    public ProductNotFound(String message) {
-        super(message);
-    }
 }
