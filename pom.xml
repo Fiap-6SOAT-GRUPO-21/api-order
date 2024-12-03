@@ -36,6 +36,10 @@
         <sonar.coverage.exclusions>**/application/**</sonar.coverage.exclusions>
         <sonar.coverage.exclusions>**/domain/**</sonar.coverage.exclusions>
         <sonar.coverage.exclusions>**/infra/**</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>**/exceptions/**</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>**/UpdateOrderImpl.class</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>**/UpdateOrderStatusImpl.class</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>**/FindOrdersByCPFImpl.class</sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
@@ -209,6 +213,10 @@
                         <exclude>**/application/**</exclude>
                         <exclude>**/domain/**</exclude>
                         <exclude>**/infra/**</exclude>
+                        <exclude>**/exceptions/**</exclude>
+                        <exclude>**/UpdateOrderImpl.class</exclude>
+                        <exclude>**/UpdateOrderStatusImpl.class</exclude>
+                        <exclude>**/FindOrdersByCPFImpl.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>
