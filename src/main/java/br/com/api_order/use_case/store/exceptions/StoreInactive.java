@@ -9,8 +9,4 @@ public class StoreInactive extends RuntimeException {
     public StoreInactive() {
         super("Store inactive");
     }
-
-    public StoreInactive(String message) {
-        super(message);
-    }
 }
